@@ -1,9 +1,11 @@
-pipeline{
+pipeline {
     agent any
-    environment{
+
+    environment {
         GIT_CREDENTIALS_ID = '1'
         GIT_REPO = 'git@github.com:MrShudu-LFI/MathFunctions.git'
         BRANCH = 'master'
+        PYTHON_ENV = 'venv'  // Virtual environment name (if needed)
     }
 
     stages {
@@ -15,11 +17,21 @@ pipeline{
             }
         }
 
-        stage('Build'){
+        stage('Build') {
             steps {
-                git branch:
+                script {
+                    sh 'python -m venv ${PYTHON_ENV}'  // Create virtual environment (optional)
+                    sh 'source ${PYTHON_ENV}/bin/activate && pip install -r requirements.txt || true' // Install dependencies if required
+                }
             }
         }
 
+        stage('Test') {
+            steps {
+                script {
+                    sh 'source ${PYTHON_ENV}/bin/activate && python -m pytest test_BasicFunctions.py' // Run tests
+                }
+            }
+        }
     }
 }

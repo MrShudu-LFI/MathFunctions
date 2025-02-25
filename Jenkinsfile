@@ -20,7 +20,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'python -m venv ${PYTHON_ENV}'  // Create virtual environment (optional)
+                    sh 'python3 -m venv ${PYTHON_ENV}'  // Create virtual environment (optional)
                     sh 'source ${PYTHON_ENV}/bin/activate && pip install -r requirements.txt || true' // Install dependencies if required
                 }
             }
